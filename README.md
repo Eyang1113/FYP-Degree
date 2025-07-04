@@ -29,15 +29,19 @@ Make sure the following software are installed:
 ### 3. Python Forecast Script
 
 - Save the oee_forecast_date.py file in a folder, e.g.:
+  ```
   program/
   └── oee_forecast_date.py
+  ```
 
 - Install required Python libraries:
+  ```
   pip install pandas
   pip install numpy
   pip install mysql-connector-python
   pip install scikit-learn
   pip install tensorflow
+  ```
 
 ### 4. Configure Batch File
 
