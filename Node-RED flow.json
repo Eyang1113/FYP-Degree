@@ -1,0 +1,256 @@
+[
+    {
+        "id": "db2004278ec0ec28",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "445e58b95acaa2bd",
+        "type": "mqtt out",
+        "z": "db2004278ec0ec28",
+        "name": "",
+        "topic": "/fyp/equipment1",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5a7b9fdd6837e92d",
+        "x": 480,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "9dd44fa44e792a5e",
+        "type": "inject",
+        "z": "db2004278ec0ec28",
+        "d": true,
+        "name": "test",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[{\"name\":\"Gru\",\"age\":30},{\"name\":\"Hay\",\"age\":48}]",
+        "payloadType": "json",
+        "x": 270,
+        "y": 160,
+        "wires": [
+            [
+                "445e58b95acaa2bd"
+            ]
+        ]
+    },
+    {
+        "id": "58dd7897e219082e",
+        "type": "mqtt in",
+        "z": "db2004278ec0ec28",
+        "name": "",
+        "topic": "/fyp/equipment1",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "5a7b9fdd6837e92d",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 480,
+        "y": 200,
+        "wires": [
+            [
+                "9cf3fadba87d9daa",
+                "9c3df172436a71e0",
+                "2a842d9db3e393d6"
+            ]
+        ]
+    },
+    {
+        "id": "9c3df172436a71e0",
+        "type": "split",
+        "z": "db2004278ec0ec28",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload",
+        "x": 670,
+        "y": 200,
+        "wires": [
+            [
+                "759bf58ab56d3d98",
+                "3c6d7e7df0ddaa43"
+            ]
+        ]
+    },
+    {
+        "id": "759bf58ab56d3d98",
+        "type": "function",
+        "z": "db2004278ec0ec28",
+        "name": "insert db",
+        "func": "let data = msg.payload;\n\nmsg.topic = `INSERT INTO cookies_production (\n  Machine, StartDateTime, EndDateTime, Duration, BiscuitMade, totalBiscuitMade,\n  targetBiscuitMade, GBiscuitMade, TotalGBM, OEE_Category, Product, Gross_Time,\n  Net_Time, Effective_Runtime, Availability_Gross, Availability_Net, Performance,\n  Quality, OEE_Gross, OEE_net\n) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;\n\nmsg.payload = [\n  data.Machine,\n  data.StartDateTime,\n  data.EndDateTime,\n  data.Duration,\n  data.BiscuitMade,\n  data.totalBiscuitMade,\n  data.targetBiscuitMade,\n  data.GBiscuitMade,\n  data.TotalGBM,\n  data.OEE_Category,\n  data.Product,\n  data.Gross_Time,\n  data.Net_Time,\n  data.Effective_Runtime,\n  data.Availability_Gross,\n  data.Availability_Net,\n  data.Performance,\n  data.Quality,\n  data.OEE_Gross,\n  data.OEE_net\n];\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 200,
+        "wires": [
+            [
+                "2966c4291aeb3092"
+            ]
+        ]
+    },
+    {
+        "id": "2966c4291aeb3092",
+        "type": "mysql",
+        "z": "db2004278ec0ec28",
+        "mydb": "f243efd45c824fe5",
+        "name": "",
+        "x": 1020,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9cf3fadba87d9daa",
+        "type": "debug",
+        "z": "db2004278ec0ec28",
+        "d": true,
+        "name": "test",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "3bb1eee36a7f2156",
+        "type": "inject",
+        "z": "db2004278ec0ec28",
+        "name": "/fyp/equipment1",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[{\"Machine\":\"Biscuit Filling Machine\",\"StartDateTime\":\"1/8/2021 0:23\",\"EndDateTime\":\"1/8/2021 0:25\",\"Duration\":1.883333325,\"BiscuitMade\":1234,\"totalBiscuitMade\":9369.999964,\"targetBiscuitMade\":9763.199957,\"GBiscuitMade\":666,\"TotalGBM\":8801.999964,\"OEE_Category\":\"CC (Changeover Cleaning)\",\"Product\":\"Jammy Creams\",\"Gross_Time\":259200,\"Net_Time\":259200,\"Effective_Runtime\":259198.1167,\"Availability_Gross\":0.999992734,\"Availability_Net\":0.999992734,\"Performance\":0.95972632,\"Quality\":0.939381003,\"OEE_Gross\":90.15421223,\"OEE_net\":0.901542122},{\"Machine\":\"Biscuit Filling Machine\",\"StartDateTime\":\"2/8/2021 08:00\",\"EndDateTime\":\"2/8/2021 08:15\",\"Duration\":15,\"BiscuitMade\":6000,\"totalBiscuitMade\":23691,\"targetBiscuitMade\":25000,\"GBiscuitMade\":700,\"TotalGBM\":14790,\"OEE_Category\":\"NO (No Order)\",\"Product\":\"Vanilla Creams\",\"Gross_Time\":259200,\"Net_Time\":259160,\"Effective_Runtime\":259150,\"Availability_Gross\":0.9997,\"Availability_Net\":0.9996,\"Performance\":0.955,\"Quality\":0.97,\"OEE_Gross\":92.55,\"OEE_net\":0.9155},{\"Machine\":\"Biscuit Filling Machine\",\"StartDateTime\":\"3/8/2021 07:45\",\"EndDateTime\":\"3/8/2021 08:00\",\"Duration\":15,\"BiscuitMade\":6200,\"totalBiscuitMade\":29891,\"targetBiscuitMade\":31200,\"GBiscuitMade\":680,\"TotalGBM\":15470,\"OEE_Category\":\"NO (No Order)\",\"Product\":\"Jammy Creams\",\"Gross_Time\":259200,\"Net_Time\":259150,\"Effective_Runtime\":259140,\"Availability_Gross\":0.9996,\"Availability_Net\":0.9995,\"Performance\":0.948,\"Quality\":0.965,\"OEE_Gross\":91.43,\"OEE_net\":0.8743},{\"Machine\":\"Biscuit Filling Machine\",\"StartDateTime\":\"4/8/2021 09:00\",\"EndDateTime\":\"4/8/2021 09:20\",\"Duration\":20,\"BiscuitMade\":8500,\"totalBiscuitMade\":38391,\"targetBiscuitMade\":40000,\"GBiscuitMade\":900,\"TotalGBM\":16370,\"OEE_Category\":\"CC (Changeover Cleaning)\",\"Product\":\"Custard Creams\",\"Gross_Time\":259200,\"Net_Time\":259180,\"Effective_Runtime\":259170,\"Availability_Gross\":0.9999,\"Availability_Net\":0.9998,\"Performance\":0.952,\"Quality\":0.96,\"OEE_Gross\":91.39,\"OEE_net\":0.8239},{\"Machine\":\"Biscuit Filling Machine\",\"StartDateTime\":\"5/8/2021 10:00\",\"EndDateTime\":\"5/8/2021 10:10\",\"Duration\":80,\"BiscuitMade\":4200,\"totalBiscuitMade\":42591,\"targetBiscuitMade\":44000,\"GBiscuitMade\":520,\"TotalGBM\":16890,\"OEE_Category\":\"CC (Changeover Cleaning)\",\"Product\":\"Choco Creams\",\"Gross_Time\":259200,\"Net_Time\":259170,\"Effective_Runtime\":259160,\"Availability_Gross\":0.9997,\"Availability_Net\":0.9996,\"Performance\":0.96,\"Quality\":0.97,\"OEE_Gross\":92.5,\"OEE_net\":0.895},{\"Machine\":\"Biscuit Filling Machine\",\"StartDateTime\":\"6/8/2021 11:00\",\"EndDateTime\":\"6/8/2021 11:12\",\"Duration\":12,\"BiscuitMade\":5300,\"totalBiscuitMade\":47891,\"targetBiscuitMade\":49500,\"GBiscuitMade\":650,\"TotalGBM\":17540,\"OEE_Category\":\"PM (Maintenance)\",\"Product\":\"Vanilla Creams\",\"Gross_Time\":259200,\"Net_Time\":259160,\"Effective_Runtime\":259150,\"Availability_Gross\":0.9997,\"Availability_Net\":0.9996,\"Performance\":0.953,\"Quality\":0.968,\"OEE_Gross\":92.13,\"OEE_net\":0.9213},{\"Machine\":\"Biscuit Filling Machine\",\"StartDateTime\":\"7/8/2021 13:30\",\"EndDateTime\":\"7/8/2021 13:45\",\"Duration\":15,\"BiscuitMade\":6100,\"totalBiscuitMade\":53991,\"targetBiscuitMade\":55500,\"GBiscuitMade\":720,\"TotalGBM\":18260,\"OEE_Category\":\"CC (Changeover Cleaning)\",\"Product\":\"Jammy Creams\",\"Gross_Time\":259200,\"Net_Time\":259170,\"Effective_Runtime\":259160,\"Availability_Gross\":0.9998,\"Availability_Net\":0.9997,\"Performance\":0.957,\"Quality\":0.963,\"OEE_Gross\":92.13,\"OEE_net\":0.9213}]",
+        "payloadType": "json",
+        "x": 240,
+        "y": 100,
+        "wires": [
+            [
+                "445e58b95acaa2bd"
+            ]
+        ]
+    },
+    {
+        "id": "3c6d7e7df0ddaa43",
+        "type": "debug",
+        "z": "db2004278ec0ec28",
+        "name": "Split data",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "2a842d9db3e393d6",
+        "type": "debug",
+        "z": "db2004278ec0ec28",
+        "name": "JSON array",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "5a7b9fdd6837e92d",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "f243efd45c824fe5",
+        "type": "MySQLdatabase",
+        "name": "dbconn",
+        "host": "localhost",
+        "port": "3306",
+        "db": "cookies",
+        "tz": "",
+        "charset": "UTF8"
+    }
+]
